@@ -1,0 +1,9 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "taratasy"
+resolve_s3 = true
+s3_prefix = "taratasy"
+region = "eu-central-1"
+profile = "bp"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
