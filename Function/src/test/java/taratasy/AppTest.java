@@ -1,16 +1,15 @@
 package taratasy;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppTest {
   @Test
-  public void successfulResponse() {
+  public void hello() {
     App app = new App();
     APIGatewayProxyResponseEvent result = app.handleRequest(null, null);
     assertEquals(200, result.getStatusCode().intValue());
