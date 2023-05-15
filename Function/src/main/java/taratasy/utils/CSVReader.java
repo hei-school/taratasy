@@ -3,6 +3,7 @@ package taratasy.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Function;
@@ -25,13 +26,6 @@ public class CSVReader implements Function<File, List<List<String>>> {
   }
 
   private List<String> getRecordFromLine(String line) {
-    var values = new ArrayList<String>();
-    try (Scanner rowScanner = new Scanner(line)) {
-      rowScanner.useDelimiter(COMMA_DELIMITER);
-      while (rowScanner.hasNext()) {
-        values.add(rowScanner.next());
-      }
-    }
-    return values;
+    return Arrays.asList(line.split(COMMA_DELIMITER));
   }
 }
