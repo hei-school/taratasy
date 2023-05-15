@@ -14,6 +14,7 @@ public class CSVReader implements Function<File, List<List<String>>> {
   public List<List<String>> apply(File file) {
     List<List<String>> records = new ArrayList<>();
     try (Scanner scanner = new Scanner(file)) {
+      scanner.nextLine(); // first line is header
       while (scanner.hasNextLine()) {
         records.add(getRecordFromLine(scanner.nextLine()));
       }

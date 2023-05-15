@@ -1,3 +1,4 @@
+principal,target,operation
 student,self,read
 teacher,student,read
 manager,student,crupdate
