@@ -9,7 +9,7 @@ Globals:
     Architectures:
       - x86_64
     Timeout: 20
-    MemorySize: 512
+    MemorySize: 256
     SnapStart:
       ApplyOn: PublishedVersions
     Environment:
@@ -33,7 +33,7 @@ Resources:
     Properties:
       Handler: taratasy.handler.GetFileByIdHandler::apply
       Events:
-        GetFiles:
+        GetFileById:
           Type: HttpApi
           Properties:
             Path: /users/{userId}/files/{fileId}
@@ -43,7 +43,7 @@ Resources:
     Properties:
       Handler: taratasy.handler.DreactivateFileHandler::apply
       Events:
-        GetFiles:
+        DreactivateFile:
           Type: HttpApi
           Properties:
             Path: /users/{userId}/files/{fileId}/status
