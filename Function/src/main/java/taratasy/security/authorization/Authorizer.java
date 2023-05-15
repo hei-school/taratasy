@@ -1,4 +1,4 @@
-package taratasy.security;
+package taratasy.security.authorization;
 
 import taratasy.utils.CSVReader;
 

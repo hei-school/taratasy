@@ -1,4 +1,4 @@
-package taratasy.security;
+package taratasy.security.authorization;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -8,9 +8,9 @@ import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static taratasy.security.Operation.CRUPDATE;
-import static taratasy.security.Operation.DREACTIVATE;
-import static taratasy.security.Operation.READ;
+import static taratasy.security.authorization.Operation.CRUPDATE;
+import static taratasy.security.authorization.Operation.DREACTIVATE;
+import static taratasy.security.authorization.Operation.READ;
 
 class AuthorizerHeiTest {
   private static Authorizer authorizer;

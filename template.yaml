@@ -2,34 +2,33 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Yet another documentary API, in REST.
 
-Resources:
+Globals:
   Function:
+    CodeUri: Function
+    Runtime: java17
+    Architectures:
+      - x86_64
+    Timeout: 20
+    MemorySize: 512
+    SnapStart:
+      ApplyOn: PublishedVersions
+    Environment:
+      Variables:
+        PARAM1: VALUE
+        JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+
+Resources:
+  GetFilesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: Function
-      Handler: taratasy.App::handleRequest
-      Runtime: java17
-      Architectures:
-        - x86_64
-      Timeout: 20
-      MemorySize: 512
-      SnapStart:
-        ApplyOn: PublishedVersions
-      Environment:
-        Variables:
-          PARAM1: VALUE
-          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+      Handler: taratasy.handler.GetFilesHandler::apply
       Events:
-        AnyCall:
+        GetFiles:
           Type: HttpApi
           Properties:
-            Path: /{proxy+}
-            Method: any
+            Path: /users/{userId}/files
+            Method: get
 
 Outputs:
   HttpApi:
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
-  Function:
-    Value: !GetAtt Function.Arn
-  IamRole:
-    Value: !GetAtt FunctionRole.Arn
