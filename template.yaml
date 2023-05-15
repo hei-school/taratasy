@@ -28,6 +28,26 @@ Resources:
           Properties:
             Path: /users/{userId}/files
             Method: get
+  GetFileByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: taratasy.handler.GetFileByIdHandler::apply
+      Events:
+        GetFiles:
+          Type: HttpApi
+          Properties:
+            Path: /users/{userId}/files/{fileId}
+            Method: get
+  DreactivateFileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: taratasy.handler.DreactivateFileHandler::apply
+      Events:
+        GetFiles:
+          Type: HttpApi
+          Properties:
+            Path: /users/{userId}/files/{fileId}/status
+            Method: put
 
 Outputs:
   HttpApi:
