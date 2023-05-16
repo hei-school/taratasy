@@ -3,38 +3,40 @@ package taratasy.security.authentication.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import taratasy.security.authentication.Authenticator;
 import taratasy.security.authentication.Bearer;
-import taratasy.security.authentication.Whoami;
+import taratasy.security.authentication.User;
+import taratasy.security.authentication.WhoamiApi;
+import taratasy.security.authentication.WhoisApi;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 
-public class UrlBasedAuthenticator implements Authenticator {
+public class UriBasedAuthenticator implements Authenticator {
 
-  private final URI authenticatorApiUri;
+  private final WhoamiApi whoamiApi;
+  private final WhoisApi whoisApi;
   private final HttpClient httpClient = HttpClient.newHttpClient();
   private final ObjectMapper om = new ObjectMapper();
 
-  public UrlBasedAuthenticator(URI authenticatorApiUri) {
-    this.authenticatorApiUri = authenticatorApiUri;
+  public UriBasedAuthenticator(WhoamiApi whoamiApi, WhoisApi whoisApi) {
+    this.whoamiApi = whoamiApi;
+    this.whoisApi = whoisApi;
   }
 
   @Override
-  public Whoami apply(Bearer bearer) {
+  public User apply(Bearer bearer) {
     try {
       HttpRequest request = HttpRequest.newBuilder()
-          .uri(new URI(authenticatorApiUri.toString()))
+          .uri(whoamiApi.uri())
           .GET()
           .header(AUTHORIZATION_HEADER, bearer.value())
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      return om.readValue(response.body(), Whoami.class);
-    } catch (URISyntaxException | IOException | InterruptedException e) {
+      return om.readValue(response.body(), User.class);
+    } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
   }

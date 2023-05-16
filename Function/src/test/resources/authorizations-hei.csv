@@ -1,5 +1,5 @@
-principal,target,operation
-student,self,read
-teacher,student,read
-manager,student,crupdate
-manager,student,dreactivate
+requester,owner,operation
+role=student,self,read
+role=teacher,role=student,read
+role=manager,role=student,crupdate
+role=manager,role=student,dreactivate

@@ -1,4 +1,4 @@
 package taratasy.security.authorization;
 
-public record Target(String name) {
+public record Owner(AccessId accessId) {
 }

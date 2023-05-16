@@ -3,14 +3,15 @@ package taratasy.handler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import taratasy.security.authentication.ApiToken;
 import taratasy.security.authentication.Authenticator;
 import taratasy.security.authentication.Bearer;
-import taratasy.security.authentication.Whoami;
-import taratasy.security.authentication.impl.UrlBasedAuthenticator;
+import taratasy.security.authentication.User;
+import taratasy.security.authentication.WhoamiApi;
+import taratasy.security.authentication.WhoisApi;
+import taratasy.security.authentication.impl.UriBasedAuthenticator;
 import taratasy.security.authorization.Authorizer;
 import taratasy.security.authorization.Operation;
-import taratasy.security.authorization.Principal;
-import taratasy.security.authorization.Target;
 
 import java.io.File;
 import java.net.URI;
@@ -30,7 +31,9 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
-    authenticator = new UrlBasedAuthenticator(new URI(System.getenv("WHOAMI_AUTHENTICATOR_BASEURL")));
+    authenticator = new UriBasedAuthenticator(
+        new WhoamiApi(new URI(System.getenv("WHOAMI_URI"))),
+        new WhoisApi(new URI(System.getenv("WH0IS_URI")), new ApiToken(System.getenv("WH0IS_API_TOKEN"))));
     authorizer = new Authorizer(authorizationsFile);
   }
 
@@ -46,26 +49,18 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   private boolean isAuthorized(APIGatewayProxyRequestEvent input) {
     var whoami = whoami(input);
-    Target targetUserId = getTargetUserId(input);
-    Target targetUserRole = getTargetUserRole(input);
-    Operation operation = getTargetOperation();
-    return authorizer.isAuthorized(new Principal(whoami.userId()), targetUserId, operation) ||
-        authorizer.isAuthorized(new Principal(whoami.role()), targetUserId, operation) ||
-        authorizer.isAuthorized(new Principal(whoami.userId()), targetUserRole, operation) ||
-        authorizer.isAuthorized(new Principal(whoami.role()), targetUserRole, operation);
+    var ownerUser = getOwnerUser(input);
+    Operation operation = getOperation();
+    return authorizer.isAuthorized(whoami, ownerUser, operation);
   }
 
-  protected Whoami whoami(APIGatewayProxyRequestEvent input) {
+  protected User whoami(APIGatewayProxyRequestEvent input) {
     return authenticator.apply(new Bearer(input.getHeaders().get(AUTHORIZATION_HEADER)));
   }
 
-  protected Target getTargetUserId(APIGatewayProxyRequestEvent input) {
+  protected User getOwnerUser(APIGatewayProxyRequestEvent input) {
     throw new RuntimeException("TODO");
   }
 
-  protected Target getTargetUserRole(APIGatewayProxyRequestEvent input) {
-    throw new RuntimeException("TODO");
-  }
-
-  protected abstract Operation getTargetOperation();
+  protected abstract Operation getOperation();
 }

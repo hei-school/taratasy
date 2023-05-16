@@ -1,4 +1,4 @@
 package taratasy.security.authorization;
 
-public record Principal(String name) {
+public interface AccessId {
 }

@@ -24,7 +24,7 @@ public class DreactivateFileHandler extends SecuredRequestHandler {
   }
 
   @Override
-  protected Operation getTargetOperation() {
+  protected Operation getOperation() {
     return DREACTIVATE;
   }
 }

@@ -24,7 +24,7 @@ public class GetFileByIdHandler extends SecuredRequestHandler {
   }
 
   @Override
-  protected Operation getTargetOperation() {
+  protected Operation getOperation() {
     return READ;
   }
 }
