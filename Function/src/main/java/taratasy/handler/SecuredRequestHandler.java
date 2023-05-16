@@ -13,9 +13,8 @@ import taratasy.security.authorization.Principal;
 import taratasy.security.authorization.Target;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.function.BiFunction;
 
 public abstract class SecuredRequestHandler
@@ -24,14 +23,16 @@ public abstract class SecuredRequestHandler
   private final Authenticator authenticator;
   private final Authorizer authorizer;
 
-  public SecuredRequestHandler() throws URISyntaxException, MalformedURLException {
+  public static final String AUTHORIZATION_HEADER = "authorization";
+
+  public SecuredRequestHandler() throws URISyntaxException {
     this(new File(SecuredRequestHandler.class
         .getClassLoader()
         .getResource("authorizations.csv").toURI()));
   }
 
-  public SecuredRequestHandler(File authorizationsFile) throws MalformedURLException {
-    authenticator = new UrlBasedAuthenticator(new URL(System.getenv("WHOAMI_AUTHENTICATOR_BASEURL")));
+  public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
+    authenticator = new UrlBasedAuthenticator(new URI(System.getenv("WHOAMI_AUTHENTICATOR_BASEURL")));
     authorizer = new Authorizer(authorizationsFile);
   }
 
@@ -57,7 +58,7 @@ public abstract class SecuredRequestHandler
   }
 
   protected Whoami whoami(APIGatewayProxyRequestEvent input) {
-    return authenticator.apply(new Bearer(input.getHeaders().get("authorization")));
+    return authenticator.apply(new Bearer(input.getHeaders().get(AUTHORIZATION_HEADER)));
   }
 
   protected Target getTargetUserId(APIGatewayProxyRequestEvent input) {
