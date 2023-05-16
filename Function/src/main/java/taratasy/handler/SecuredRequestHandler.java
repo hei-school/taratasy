@@ -15,10 +15,8 @@ import taratasy.security.authorization.Target;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.function.BiFunction;
 
-public abstract class SecuredRequestHandler
-    implements BiFunction<APIGatewayProxyRequestEvent, Context, APIGatewayProxyResponseEvent> {
+public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   private final Authenticator authenticator;
   private final Authorizer authorizer;
@@ -70,6 +68,4 @@ public abstract class SecuredRequestHandler
   }
 
   protected abstract Operation getTargetOperation();
-
-  protected abstract APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context);
 }
