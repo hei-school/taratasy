@@ -1,7 +1,6 @@
 package taratasy.security.authorization;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import taratasy.security.authentication.User;
 
@@ -34,7 +33,6 @@ class AuthorizerHeiTest {
     authorizer = new Authorizer(new File(authorizationsResource.toURI()));
   }
 
-  @Disabled //TODO
   @Test
   public void self_can_read_self() {
     assertTrue(authorizer.isAuthorized(bozyTeacher, bozyTeacher, READ));
