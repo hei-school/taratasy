@@ -1,7 +1,7 @@
 requester,owner,operation
-role=student,self,read
-role=teacher,role=student,read
-bema,role=student,crupdate
+@self,@self,read
+@role:teacher,@role:student,read
+bema,@role:student,crupdate
 Bema , boZy, dreactivAte
-role=manager,role=student,crupdate
-role=manager,role=student,dreactivate
+@role:manager,@role:student,crupdate
+@role:manager,@role:student,dreactivate

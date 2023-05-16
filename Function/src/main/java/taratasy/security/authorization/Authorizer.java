@@ -17,7 +17,7 @@ public class Authorizer {
   private final int OWNER_INDEX_IN_CSV = 1;
   private final int OPERATION_INDEX_IN_CSV = 2;
 
-  private static final Pattern PREFIXED_ROLE_PATTERN = Pattern.compile("role=(.*)");
+  private static final Pattern PREFIXED_ROLE_PATTERN = Pattern.compile("@role:(.*)");
 
   public Authorizer(File authorizationsFile) {
     authorizations = new HashMap<>();
