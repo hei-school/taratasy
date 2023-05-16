@@ -53,4 +53,9 @@ class AuthorizerHeiTest {
     assertFalse(authorizer.isAuthorized(bozyTeacher, louManager, CRUPDATE));
     assertFalse(authorizer.isAuthorized(bozyTeacher, louManager, DREACTIVATE));
   }
+
+  @Test
+  public void bema_can_dreactivate_bozy() {
+    assertTrue(authorizer.isAuthorized(bemaTeacher, bozyTeacher, DREACTIVATE));
+  }
 }

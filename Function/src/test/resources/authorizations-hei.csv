@@ -1,5 +1,6 @@
 requester,owner,operation
 role=student,self,read
 role=teacher,role=student,read
+bema,bozy,dreactivate
 role=manager,role=student,crupdate
 role=manager,role=student,dreactivate
