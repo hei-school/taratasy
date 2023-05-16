@@ -24,10 +24,14 @@ public class Authorizer {
 
     var authorizationLines = new CSVReader().apply(authorizationsFile);
     authorizationLines.forEach(authorizationLine -> {
-      var requester = constructRequester(authorizationLine.get(REQUESTER_INDEX_IN_CSV));
-      var owner = constructOwner(authorizationLine.get(OWNER_INDEX_IN_CSV));
+      var requester = constructRequester(authorizationLine.get(REQUESTER_INDEX_IN_CSV).trim().toLowerCase());
+      var owner = constructOwner(authorizationLine.get(OWNER_INDEX_IN_CSV).trim().toLowerCase());
       var requestOwner = new RequestOwner(requester, owner);
-      var operation = Operation.valueOf(authorizationLine.get(OPERATION_INDEX_IN_CSV).toUpperCase());
+      var operation = Operation.valueOf(
+          authorizationLine
+              .get(OPERATION_INDEX_IN_CSV)
+              .trim()
+              .toUpperCase());
 
       authorizations.computeIfAbsent(requestOwner, k -> new ArrayList<>());
       authorizations.get(requestOwner).add(operation);
