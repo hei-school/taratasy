@@ -41,6 +41,12 @@ class AuthorizerHeiTest {
   }
 
   @Test
+  public void bema_is_only_teacher_that_can_crupdate_students() {
+    assertTrue(authorizer.isAuthorized(bemaTeacher, litaStudent, CRUPDATE));
+    assertFalse(authorizer.isAuthorized(bozyTeacher, litaStudent, CRUPDATE));
+  }
+
+  @Test
   public void teachers_can_nothing_on_teachers() {
     assertFalse(authorizer.isAuthorized(bozyTeacher, bemaTeacher, READ));
     assertFalse(authorizer.isAuthorized(bozyTeacher, bemaTeacher, CRUPDATE));
@@ -57,5 +63,13 @@ class AuthorizerHeiTest {
   @Test
   public void bema_can_dreactivate_bozy() {
     assertTrue(authorizer.isAuthorized(bemaTeacher, bozyTeacher, DREACTIVATE));
+  }
+
+  @Test
+  public void unknown_user_is_denied() {
+    assertFalse(authorizer.isAuthorized(
+        new User(new User.Id("unknown"), new User.Role("unknown")),
+        bozyTeacher,
+        DREACTIVATE));
   }
 }
