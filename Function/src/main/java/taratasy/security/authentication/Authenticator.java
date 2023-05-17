@@ -1,6 +1,7 @@
 package taratasy.security.authentication;
 
-import java.util.function.Function;
+public interface Authenticator {
+  User whoami(Bearer bearer);
 
-public interface Authenticator extends Function<Bearer, User> {
+  User whois(User.Id userId);
 }

@@ -9,13 +9,14 @@ import taratasy.security.authentication.Bearer;
 import taratasy.security.authentication.User;
 import taratasy.security.authentication.WhoamiApi;
 import taratasy.security.authentication.WhoisApi;
-import taratasy.security.authentication.impl.UriBasedAuthenticator;
+import taratasy.security.authentication.impl.rest.RestBasedAuthenticator;
 import taratasy.security.authorization.Authorizer;
 import taratasy.security.authorization.Operation;
 
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
@@ -24,6 +25,8 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   public static final String AUTHORIZATION_HEADER = "authorization";
 
+  private static final Pattern PATH_WITH_USERID_PATTERN = Pattern.compile("/users/(?<userId>.*)/.*");
+
   public SecuredRequestHandler() throws URISyntaxException {
     this(new File(SecuredRequestHandler.class
         .getClassLoader()
@@ -31,9 +34,9 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
-    authenticator = new UriBasedAuthenticator(
+    authenticator = new RestBasedAuthenticator(
         new WhoamiApi(new URI(System.getenv("WHOAMI_URI"))),
-        new WhoisApi(new URI(System.getenv("WH0IS_URI")), new ApiToken(System.getenv("WH0IS_API_TOKEN"))));
+        new WhoisApi(new URI(System.getenv("WHOIS_URI")), new ApiToken(System.getenv("WHOIS_API_TOKEN"))));
     authorizer = new Authorizer(authorizationsFile);
   }
 
@@ -49,17 +52,22 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   private boolean isAuthorized(APIGatewayProxyRequestEvent input) {
     var whoami = whoami(input);
-    var ownerUser = getOwnerUser(input);
+    var ownerUser = whoisOwner(input);
     Operation operation = getOperation();
     return authorizer.isAuthorized(whoami, ownerUser, operation);
   }
 
   protected User whoami(APIGatewayProxyRequestEvent input) {
-    return authenticator.apply(new Bearer(input.getHeaders().get(AUTHORIZATION_HEADER)));
+    return authenticator.whoami(new Bearer(input.getHeaders().get(AUTHORIZATION_HEADER)));
   }
 
-  protected User getOwnerUser(APIGatewayProxyRequestEvent input) {
-    throw new RuntimeException("TODO");
+  protected User whoisOwner(APIGatewayProxyRequestEvent input) {
+    var path = input.getPath();
+    var userIdMatcher = PATH_WITH_USERID_PATTERN.matcher(path);
+    if (userIdMatcher.find()) {
+      return authenticator.whois(new User.Id(userIdMatcher.group("userId")));
+    }
+    throw new RuntimeException(String.format("path=%s does not match pattern=%s", path, PATH_WITH_USERID_PATTERN));
   }
 
   protected abstract Operation getOperation();
