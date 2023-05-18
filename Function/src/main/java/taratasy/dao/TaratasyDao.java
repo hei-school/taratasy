@@ -1,16 +1,33 @@
 package taratasy.dao;
 
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 import taratasy.model.Taratasy;
 import taratasy.security.authentication.User;
 
 import java.util.List;
 
+import static software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.keyEqualTo;
+
 public class TaratasyDao {
-  protected DynamoDbEnhancedClient dynamodbClient = DynamoDbEnhancedClient.create();
+  private final DynamoDbTable<TaratasyDynamodb> dynamodbTable;
+  private final TaratasyMapper taratasyMapper;
+
+  public TaratasyDao(DynamoDbTable<TaratasyDynamodb> dynamodbTable) {
+    this.dynamodbTable = dynamodbTable;
+    taratasyMapper = new TaratasyMapper();
+  }
 
   public List<Taratasy> findBy(User.Id userId) {
-    return null;
+    var keyEqual = keyEqualTo(b -> b.partitionValue(userId.value()));
+    var tableQuery = QueryEnhancedRequest.builder()
+        .queryConditional(keyEqual)
+        .build();
+    PageIterable<TaratasyDynamodb> pagedResults = dynamodbTable.query(tableQuery);
+    return pagedResults.items().stream()
+        .map(taratasyMapper::toModel)
+        .toList();
   }
 
   public Taratasy findBy(User.Id userId, Taratasy.Id taratasyId) {

@@ -5,14 +5,13 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import taratasy.security.authorization.Operation;
 
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 import static taratasy.security.authorization.Operation.DREACTIVATE;
 
 public class DreactivateFileHandler extends SecuredRequestHandler {
 
-  public DreactivateFileHandler() throws URISyntaxException, MalformedURLException {
+  public DreactivateFileHandler() throws URISyntaxException {
     super();
   }
 

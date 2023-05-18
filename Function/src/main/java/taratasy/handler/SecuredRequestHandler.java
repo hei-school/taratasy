@@ -34,6 +34,7 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
+    super();
     authenticator = new RestBasedAuthenticator(
         new WhoamiApi(new URI(System.getenv("WHOAMI_URI"))),
         new WhoisApi(new URI(System.getenv("WHOIS_URI")), new ApiToken(System.getenv("WHOIS_API_TOKEN"))));

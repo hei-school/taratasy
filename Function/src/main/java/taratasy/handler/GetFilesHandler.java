@@ -12,13 +12,16 @@ import java.net.URISyntaxException;
 
 import static taratasy.security.authorization.Operation.READ;
 
-public class GetFilesHandler extends SecuredRequestHandler {
+public class GetFilesHandler extends DaoConnectedHandler {
 
-  private final TaratasyDao taratasyDao = new TaratasyDao();
   private final TaratasyMapper taratasyMapper = new TaratasyMapper();
 
   public GetFilesHandler() throws URISyntaxException {
     super();
+  }
+
+  public GetFilesHandler(TaratasyDao taratasyDao) throws URISyntaxException {
+    super(taratasyDao);
   }
 
   @Override
