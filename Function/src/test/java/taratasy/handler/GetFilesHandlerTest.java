@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
@@ -44,7 +43,7 @@ public class GetFilesHandlerTest {
 
   private String setupMocksForUserId(String userId) {
     var restString = String.format("""
-        { "userId": "%s", "role": "student", "unknown": "unknown" }
+        { "id": "%s", "role": "student", "unknown": "unknown" }
         """, userId);
     server.stubFor(get("/whois/" + userId)
         .withHeader(AUTHORIZATION_HEADER, equalTo(WHO_API_TOKEN_MOCK))
@@ -58,7 +57,7 @@ public class GetFilesHandlerTest {
   }
 
   @Test
-  public void self_can_read_self() throws MalformedURLException, URISyntaxException {
+  public void self_can_read_self() throws URISyntaxException {
     var bemaId = "bemaId";
     var bemaBearer = setupMocksForUserId(bemaId);
 
@@ -75,7 +74,7 @@ public class GetFilesHandlerTest {
   }
 
   @Test
-  public void bema_cannot_read_lita() throws MalformedURLException, URISyntaxException {
+  public void bema_cannot_read_lita() throws URISyntaxException {
     var bemaId = "bemaId";
     var bemaBearer = setupMocksForUserId(bemaId);
     var litaId = "litaId";

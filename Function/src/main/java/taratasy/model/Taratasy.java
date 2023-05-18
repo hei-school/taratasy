@@ -1,6 +1,8 @@
 package taratasy.model;
 
-public class Taratasy {
-  public record Id(String id) {
+import taratasy.security.authentication.User;
+
+public record Taratasy(Taratasy.Id id, User.Id ownerId, String name) {
+  public record Id(String value) {
   }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public class TaratasyDao {
   protected DynamoDbEnhancedClient dynamodbClient = DynamoDbEnhancedClient.create();
 
-  public Taratasy findBy(User.Id userId) {
+  public List<Taratasy> findBy(User.Id userId) {
     return null;
   }
 

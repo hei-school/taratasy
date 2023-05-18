@@ -42,8 +42,8 @@ public class RestBasedAuthenticator implements Authenticator {
           .header(AUTHORIZATION_HEADER, bearer.value())
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      var restUser = om.readValue(response.body(), RestUser.class);
-      return new User(new User.Id(restUser.userId), new User.Role(restUser.role));
+      var userRest = om.readValue(response.body(), UserRest.class);
+      return new User(new User.Id(userRest.id()), new User.Role(userRest.role()));
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -58,8 +58,8 @@ public class RestBasedAuthenticator implements Authenticator {
           .header(AUTHORIZATION_HEADER, whoisApi.apiToken().value())
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      var restUser = om.readValue(response.body(), RestUser.class);
-      return new User(new User.Id(restUser.userId), new User.Role(restUser.role));
+      var userRest = om.readValue(response.body(), UserRest.class);
+      return new User(new User.Id(userRest.id()), new User.Role(userRest.role()));
     } catch (IOException | InterruptedException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
