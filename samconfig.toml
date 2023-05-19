@@ -6,4 +6,5 @@ s3_prefix = "taratasy"
 region = "eu-central-1"
 profile = "bp"
 capabilities = "CAPABILITY_IAM"
+parameter_overrides = "IzaUri=\"https://iza-mock.hei.school\" IzaApiToken=\"iza-mock-server-api-token\""
 image_repositories = []
