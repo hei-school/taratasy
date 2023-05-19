@@ -16,14 +16,15 @@ import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 
 public class IzaApi {
   private final URI uri;
-  private final String apiToken;
+  private final String apiKey;
+  public static final String API_KEY_HEADER = "X-API-Key";
 
   private final HttpClient httpClient = HttpClient.newHttpClient();
   private final ObjectMapper om;
 
-  public IzaApi(URI uri, String apiToken) {
+  public IzaApi(URI uri, String apiKey) {
     this.uri = uri;
-    this.apiToken = apiToken;
+    this.apiKey = apiKey;
 
     om = new ObjectMapper();
     om.disable(FAIL_ON_UNKNOWN_PROPERTIES);
@@ -49,7 +50,7 @@ public class IzaApi {
       HttpRequest request = HttpRequest.newBuilder()
           .uri(new URI(uri + "/whois/" + userId.value()))
           .GET()
-          .header(AUTHORIZATION_HEADER, apiToken)
+          .header(API_KEY_HEADER, apiKey)
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
       var userRest = om.readValue(response.body(), UserIza.class);

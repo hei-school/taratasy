@@ -33,7 +33,7 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
     super();
-    var izaApi = new IzaApi(new URI(System.getenv("IZA_URI")), System.getenv("IZA_API_TOKEN"));
+    var izaApi = new IzaApi(new URI(System.getenv("IZA_URI")), System.getenv("IZA_API_KEY"));
     authenticator = new IzaAuthenticator(izaApi);
     authorizer = new Authorizer(authorizationsFile);
   }

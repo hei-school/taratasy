@@ -28,12 +28,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static taratasy.handler.GetFilesHandlerTest.IZA_API_TOKEN_MOCK;
+import static taratasy.handler.GetFilesHandlerTest.IZA_API_KEY_MOCK;
 import static taratasy.handler.GetFilesHandlerTest.MOCK_SERVER_PORT;
 import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
+import static taratasy.security.authentication.impl.iza.IzaApi.API_KEY_HEADER;
 
 @SetEnvironmentVariable(key = "IZA_URI", value = "http://localhost:" + MOCK_SERVER_PORT)
-@SetEnvironmentVariable(key = "IZA_API_TOKEN", value = IZA_API_TOKEN_MOCK)
+@SetEnvironmentVariable(key = "IZA_API_KEY", value = IZA_API_KEY_MOCK)
 public class GetFilesHandlerTest {
 
   private GetFilesHandler subject;
@@ -41,7 +42,7 @@ public class GetFilesHandlerTest {
 
   private WireMockServer server;
   static final int MOCK_SERVER_PORT = 1080;
-  static final String IZA_API_TOKEN_MOCK = "iza-api-token";
+  static final String IZA_API_KEY_MOCK = "iza-api-key";
 
   @BeforeEach
   void setUp() throws URISyntaxException {
@@ -62,7 +63,7 @@ public class GetFilesHandlerTest {
         { "id": "%s", "role": "student", "unknown": "unknown" }
         """, userId);
     server.stubFor(get("/whois/" + userId)
-        .withHeader(AUTHORIZATION_HEADER, equalTo(IZA_API_TOKEN_MOCK))
+        .withHeader(API_KEY_HEADER, equalTo(IZA_API_KEY_MOCK))
         .willReturn(ok().withBody(restString)));
 
     var userBearer = "bearer " + userId;
