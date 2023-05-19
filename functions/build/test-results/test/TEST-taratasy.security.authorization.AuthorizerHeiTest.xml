@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="taratasy.security.authorization.AuthorizerHeiTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-05-19T08:40:43" hostname="MacBook-Pro-de-Lou.local" time="0.008">
+<testsuite name="taratasy.security.authorization.AuthorizerHeiTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2023-05-19T15:40:55" hostname="MacBook-Pro-de-Lou.local" time="0.004">
   <properties/>
-  <testcase name="bema_can_dreactivate_bozy()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.001"/>
+  <testcase name="bema_can_dreactivate_bozy()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
   <testcase name="teachers_can_readonly_students()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.001"/>
-  <testcase name="teachers_can_nothing_on_teachers()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
+  <testcase name="teachers_can_nothing_on_teachers()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.001"/>
   <testcase name="unknown_user_is_denied()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
-  <testcase name="bema_is_only_teacher_that_can_crupdate_students()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.001"/>
-  <testcase name="self_can_read_self()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.003"/>
+  <testcase name="bema_is_only_teacher_that_can_crupdate_students()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
+  <testcase name="self_can_read_self()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
   <testcase name="teachers_can_nothing_on_managers()" classname="taratasy.security.authorization.AuthorizerHeiTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

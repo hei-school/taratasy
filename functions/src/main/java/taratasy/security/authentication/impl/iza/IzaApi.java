@@ -1,11 +1,8 @@
-package taratasy.security.authentication.impl.rest;
+package taratasy.security.authentication.impl.iza;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import taratasy.security.authentication.Authenticator;
 import taratasy.security.authentication.Bearer;
 import taratasy.security.authentication.User;
-import taratasy.security.authentication.WhoamiApi;
-import taratasy.security.authentication.WhoisApi;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,48 +14,45 @@ import java.net.http.HttpResponse;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 
-public class RestBasedAuthenticator implements Authenticator {
-
-  private final WhoamiApi whoamiApi;
-  private final WhoisApi whoisApi;
+public class IzaApi {
+  private final URI uri;
+  private final String apiToken;
 
   private final HttpClient httpClient = HttpClient.newHttpClient();
   private final ObjectMapper om;
 
-  public RestBasedAuthenticator(WhoamiApi whoamiApi, WhoisApi whoisApi) {
-    this.whoamiApi = whoamiApi;
-    this.whoisApi = whoisApi;
+  public IzaApi(URI uri, String apiToken) {
+    this.uri = uri;
+    this.apiToken = apiToken;
 
     om = new ObjectMapper();
     om.disable(FAIL_ON_UNKNOWN_PROPERTIES);
   }
 
-  @Override
   public User whoami(Bearer bearer) {
     try {
       HttpRequest request = HttpRequest.newBuilder()
-          .uri(whoamiApi.uri())
+          .uri(new URI(uri.toString() + "/whoami"))
           .GET()
           .header(AUTHORIZATION_HEADER, bearer.value())
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      var userRest = om.readValue(response.body(), UserRest.class);
+      var userRest = om.readValue(response.body(), UserIza.class);
       return new User(new User.Id(userRest.id()), new User.Role(userRest.role()));
-    } catch (IOException | InterruptedException e) {
+    } catch (IOException | InterruptedException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
   }
 
-  @Override
   public User whois(User.Id userId) {
     try {
       HttpRequest request = HttpRequest.newBuilder()
-          .uri(new URI(whoisApi.uri().toString() + "/" + userId.value()))
+          .uri(new URI(uri + "/whois/" + userId.value()))
           .GET()
-          .header(AUTHORIZATION_HEADER, whoisApi.apiToken().value())
+          .header(AUTHORIZATION_HEADER, apiToken)
           .build();
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      var userRest = om.readValue(response.body(), UserRest.class);
+      var userRest = om.readValue(response.body(), UserIza.class);
       return new User(new User.Id(userRest.id()), new User.Role(userRest.role()));
     } catch (IOException | InterruptedException | URISyntaxException e) {
       throw new RuntimeException(e);

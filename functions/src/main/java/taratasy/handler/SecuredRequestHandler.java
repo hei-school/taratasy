@@ -3,13 +3,11 @@ package taratasy.handler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import taratasy.security.authentication.ApiToken;
 import taratasy.security.authentication.Authenticator;
 import taratasy.security.authentication.Bearer;
 import taratasy.security.authentication.User;
-import taratasy.security.authentication.WhoamiApi;
-import taratasy.security.authentication.WhoisApi;
-import taratasy.security.authentication.impl.rest.RestBasedAuthenticator;
+import taratasy.security.authentication.impl.iza.IzaApi;
+import taratasy.security.authentication.impl.iza.IzaAuthenticator;
 import taratasy.security.authorization.Authorizer;
 import taratasy.security.authorization.Operation;
 
@@ -35,9 +33,8 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
   public SecuredRequestHandler(File authorizationsFile) throws URISyntaxException {
     super();
-    authenticator = new RestBasedAuthenticator(
-        new WhoamiApi(new URI(System.getenv("WHOAMI_URI"))),
-        new WhoisApi(new URI(System.getenv("WHOIS_URI")), new ApiToken(System.getenv("WHOIS_API_TOKEN"))));
+    var izaApi = new IzaApi(new URI(System.getenv("IZA_URI")), System.getenv("IZA_API_TOKEN"));
+    authenticator = new IzaAuthenticator(izaApi);
     authorizer = new Authorizer(authorizationsFile);
   }
 
