@@ -17,7 +17,7 @@ import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 public class IzaApi {
   private final URI uri;
   private final String apiKey;
-  public static final String API_KEY_HEADER = "X-API-Key";
+  public static final String API_KEY_HEADER = "x-api-key";
 
   private final HttpClient httpClient = HttpClient.newHttpClient();
   private final ObjectMapper om;
