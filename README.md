@@ -14,6 +14,25 @@ Then meet _taratasy_, the AWS serverless file API with security made easy.
 2. Set up authorization, which is as simple as providing a [_taratasy_ authorization rules](https://github.com/hei-school/taratasy/blob/main/functions/src/test/resources/authorizations-hei.csv).
 3. SAM deploy into your AWS and voilà!
 
+## API specification
+
+The following operations are supported:
+* TODO: Upload file
+* TODO: Download file
+* [Get information for all accessible files](https://github.com/hei-school/taratasy/blob/main/template.yaml#L37)
+* [Get information for a specific file](https://github.com/hei-school/taratasy/blob/main/template.yaml#L50)
+* [Deactivate or reactivate download for a specific file](https://github.com/hei-school/taratasy/blob/main/template.yaml#L63)
+
+## _taratasy_ authorization rules
+
+TODO
+
+## Generated SDK
+
+* TODO: Javascript
+* TODO: Java
+* TODO: Python
+
 ## Cost
 
 _taratasy_ is fully serverless. If you have no consumer, pay nothing. If you have millions of consumers, fear not: _taratasy_ will scale.
