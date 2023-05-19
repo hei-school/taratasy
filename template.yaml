@@ -4,7 +4,7 @@ Description: Yet another documentary API, in REST.
 
 Globals:
   Function:
-    CodeUri: Function
+    CodeUri: functions
     Runtime: java17
     Architectures:
       - x86_64
