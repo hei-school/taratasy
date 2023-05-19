@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: who-mock-server
+
+Globals:
+  Function:
+    CodeUri: functions/
+    Runtime: python3.10
+    Architectures:
+      - arm64
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  WhoamiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.whoami_handler
+      Events:
+        WhoamiCall:
+          Type: HttpApi
+          Properties:
+            Path: /whoami
+            Method: get
+
+Outputs:
+  HttpApiUrl:
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
