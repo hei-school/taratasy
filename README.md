@@ -6,7 +6,7 @@ Yet another file API, _taratasy_ being the malagasy word for _file_.
 
 Tired of setting up Amplify Storage authorization through endless configurations of Cognito User Pool, Identity Pool, S3 Policy Document... and so on? Even Firebase Storage failed you because you just had too many additional configurations to perform in Firebase Authentication and Firebase Security Rules?
 
-Then meet _taratasy_, the AWS serverless file API with security made easy.
+Then meet _taratasy_, the AWS serverless API for file management with security made easy.
 
 ## Usage
 
