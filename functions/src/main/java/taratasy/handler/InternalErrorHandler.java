@@ -12,10 +12,7 @@ public abstract class InternalErrorHandler
   @Override
   public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent input, Context context) {
     try {
-      System.out.println("handling");
-      var res = handleErrorCaughtRequest(input, context);
-      System.out.println("handled");
-      return res;
+      return handleErrorCaughtRequest(input, context);
     } catch (Exception e) {
       return new APIGatewayProxyResponseEvent()
           .withStatusCode(500)
