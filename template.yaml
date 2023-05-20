@@ -12,6 +12,7 @@ Globals:
   Function:
     CodeUri: functions
     Runtime: java17
+    Tracing: Active
     Architectures:
       - x86_64
     Timeout: 20
