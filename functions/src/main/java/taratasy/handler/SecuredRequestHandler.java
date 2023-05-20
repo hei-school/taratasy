@@ -36,14 +36,17 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   @Override
-  public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent input, Context context) {
+  protected APIGatewayProxyResponseEvent handleErrorCaughtRequest(APIGatewayProxyRequestEvent input, Context context) {
     if (!isAuthorized(input)) {
       return new APIGatewayProxyResponseEvent()
           .withStatusCode(403)
           .withBody("{ \"message\": \"forbidden\" }");
     }
-    return handleRequest(input, context);
+    return handleSecuredRequest(input, context);
   }
+
+  protected abstract APIGatewayProxyResponseEvent handleSecuredRequest(
+      APIGatewayProxyRequestEvent input, Context context);
 
   private boolean isAuthorized(APIGatewayProxyRequestEvent input) {
     var whoami = whoami(input);

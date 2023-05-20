@@ -25,7 +25,7 @@ public class GetFilesHandler extends DaoConnectedHandler {
   }
 
   @Override
-  protected APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
+  protected APIGatewayProxyResponseEvent handleSecuredRequest(APIGatewayProxyRequestEvent input, Context context) {
     User ownerUser = super.whoisOwner(input);
     return new APIGatewayProxyResponseEvent()
         .withStatusCode(200)

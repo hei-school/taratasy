@@ -16,7 +16,7 @@ public class GetFileByIdHandler extends SecuredRequestHandler {
   }
 
   @Override
-  protected APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
+  protected APIGatewayProxyResponseEvent handleSecuredRequest(APIGatewayProxyRequestEvent input, Context context) {
     return new APIGatewayProxyResponseEvent()
         .withStatusCode(200)
         .withBody("{ \"message\": \"ok\" }");

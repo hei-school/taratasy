@@ -17,6 +17,7 @@ Globals:
       - x86_64
     Timeout: 20
     MemorySize: 256
+    AutoPublishAlias: live
     SnapStart:
       ApplyOn: PublishedVersions
     Environment:
