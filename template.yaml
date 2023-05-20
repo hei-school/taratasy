@@ -15,14 +15,13 @@ Globals:
     Tracing: Active
     Architectures:
       - x86_64
-    Timeout: 20
-    MemorySize: 256
+    Timeout: 15
+    MemorySize: 512
     AutoPublishAlias: live
     SnapStart:
       ApplyOn: PublishedVersions
     Environment:
       Variables:
-        JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
         TABLE_NAME: !Ref Table
         IZA_URI: !Ref IzaUri
         IZA_API_KEY: !Ref IzaApiKey

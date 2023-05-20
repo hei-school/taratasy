@@ -1,5 +1,7 @@
 package taratasy.security.authorization;
 
+import org.crac.Context;
+import org.crac.Resource;
 import taratasy.security.authentication.User;
 import taratasy.utils.CSVReader;
 
@@ -10,7 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class Authorizer {
+import static org.crac.Core.getGlobalContext;
+import static taratasy.security.authentication.User.dummyUser;
+
+public class Authorizer implements Resource {
   private final Map<RequestOwner, List<Operation>> authorizations;
 
   private final int REQUESTER_INDEX_IN_CSV = 0;
@@ -33,6 +38,8 @@ public class Authorizer {
       authorizations.computeIfAbsent(requestOwner, k -> new ArrayList<>());
       authorizations.get(requestOwner).add(operation);
     });
+
+    getGlobalContext().register(this);
   }
 
   private Requester constructRequester(String prefixedRoleOrUserId) {
@@ -92,5 +99,15 @@ public class Authorizer {
     if (authorizedOperations != null) {
       res.addAll(authorizedOperations);
     }
+  }
+
+  @Override
+  public void beforeCheckpoint(Context<? extends Resource> context) throws Exception {
+    isAuthorized(dummyUser, dummyUser, Operation.READ);
+  }
+
+  @Override
+  public void afterRestore(Context<? extends Resource> context) throws Exception {
+
   }
 }
