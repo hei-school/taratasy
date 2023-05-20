@@ -14,7 +14,6 @@ import taratasy.security.authorization.Operation;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.regex.Pattern;
 
 public abstract class SecuredRequestHandler extends InternalErrorHandler {
 
@@ -22,8 +21,6 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   private final Authorizer authorizer;
 
   public static final String AUTHORIZATION_HEADER = "authorization";
-
-  private static final Pattern PATH_WITH_USERID_PATTERN = Pattern.compile("/users/(?<userId>.*)/.*");
 
   public SecuredRequestHandler() throws URISyntaxException {
     this(new File(SecuredRequestHandler.class
@@ -60,12 +57,8 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   protected User whoisOwner(APIGatewayProxyRequestEvent input) {
-    var path = input.getPath();
-    var userIdMatcher = PATH_WITH_USERID_PATTERN.matcher(path);
-    if (userIdMatcher.find()) {
-      return authenticator.whois(new User.Id(userIdMatcher.group("userId")));
-    }
-    throw new RuntimeException(String.format("path=%s does not match pattern=%s", path, PATH_WITH_USERID_PATTERN));
+    var userId = new User.Id(input.getPathParameters().get("userId"));
+    return authenticator.whois(userId);
   }
 
   protected abstract Operation getOperation();

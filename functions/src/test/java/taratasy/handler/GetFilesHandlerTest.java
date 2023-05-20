@@ -81,7 +81,7 @@ public class GetFilesHandlerTest {
     setupIzaMocksForUserId(litaId);
 
     APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent()
-        .withPath(String.format("/users/%s/files", litaId))
+        .withPathParameters(Map.of("userId", litaId))
         .withHeaders(Map.of(AUTHORIZATION_HEADER, bemaBearer));
     APIGatewayProxyResponseEvent result = subject.apply(requestEvent, null);
 
@@ -100,7 +100,7 @@ public class GetFilesHandlerTest {
         dynamodbResponse(List.of(new TaratasyDynamodb("fileId", bemaId, "filename"))));
 
     APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent()
-        .withPath(String.format("/users/%s/files", bemaId))
+        .withPathParameters(Map.of("userId", bemaId))
         .withHeaders(Map.of(AUTHORIZATION_HEADER, bemaBearer));
     APIGatewayProxyResponseEvent result = subject.apply(requestEvent, null);
 
