@@ -9,29 +9,29 @@ import taratasy.rest.TaratasyMapper;
 import taratasy.security.authentication.User;
 import taratasy.security.authorization.Operation;
 
-import java.net.URISyntaxException;
 import java.util.Map;
 
 import static org.crac.Core.getGlobalContext;
+import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 import static taratasy.security.authorization.Operation.READ;
 
-public class GetFilesHandler extends DaoConnectedHandler implements Resource {
+public class GetFilesHandler extends FacadeHandler implements Resource {
 
   private final TaratasyMapper taratasyMapper = new TaratasyMapper();
 
-  public GetFilesHandler() throws URISyntaxException {
+  public GetFilesHandler() {
     super();
     getGlobalContext().register(this);
   }
 
-  public GetFilesHandler(TaratasyDao taratasyDao) throws URISyntaxException {
+  public GetFilesHandler(TaratasyDao taratasyDao) {
     super(taratasyDao);
   }
 
   @Override
-  protected APIGatewayProxyResponseEvent handleSecuredRequest(APIGatewayProxyRequestEvent input, Context context) {
-    User ownerUser = super.whoisOwner(input);
-    var taratasyList = taratasyDao.findBy(ownerUser.id());
+  protected APIGatewayProxyResponseEvent handleSecuredRequest(APIGatewayProxyRequestEvent event, Context context) {
+    User ownerUser = super.whoisOwner(event);
+    var taratasyList = super.getTaratasyDao().findBy(ownerUser.id());
     return new APIGatewayProxyResponseEvent()
         .withStatusCode(200)
         .withBody(taratasyMapper.toRestString(taratasyList));

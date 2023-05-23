@@ -1,24 +1,23 @@
 package taratasy.handler;
 
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import taratasy.dao.TaratasyDao;
-import taratasy.dao.TaratasyDynamodb;
 
-import java.net.URISyntaxException;
+@AllArgsConstructor
+public abstract class DaoConnectedHandler implements AwsHandler {
+  @Getter
+  private final TaratasyDao taratasyDao;
 
-public abstract class DaoConnectedHandler extends SecuredRequestHandler {
-  protected final TaratasyDao taratasyDao;
-
-  public DaoConnectedHandler() throws URISyntaxException {
-    super();
-    taratasyDao = new TaratasyDao(
-        DynamoDbEnhancedClient.create().table(System.getenv("TABLE_NAME"),
-            TableSchema.fromImmutableClass(TaratasyDynamodb.class)));
-  }
-
-  public DaoConnectedHandler(TaratasyDao taratasyDao) throws URISyntaxException {
-    super();
-    this.taratasyDao = taratasyDao;
+  public static DaoConnectedHandler newDaoConnectedHandler(AwsHandler handler, TaratasyDao dao) {
+    return new DaoConnectedHandler(dao) {
+      @Override
+      public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent event, Context context) {
+        return handler.apply(event, context);
+      }
+    };
   }
 }

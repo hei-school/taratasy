@@ -5,15 +5,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import taratasy.security.authorization.Operation;
 
-import java.net.URISyntaxException;
-
 import static taratasy.security.authorization.Operation.DREACTIVATE;
 
-public class DreactivateFileHandler extends SecuredRequestHandler {
-
-  public DreactivateFileHandler() throws URISyntaxException {
-    super();
-  }
+public class DreactivateFileHandler extends FacadeHandler {
 
   @Override
   protected APIGatewayProxyResponseEvent handleSecuredRequest(APIGatewayProxyRequestEvent input, Context context) {

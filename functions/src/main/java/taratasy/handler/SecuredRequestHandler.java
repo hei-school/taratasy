@@ -14,15 +14,15 @@ import taratasy.security.authorization.Operation;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.function.Supplier;
 
-public abstract class SecuredRequestHandler extends InternalErrorHandler {
-
+public abstract class SecuredRequestHandler implements AwsHandler {
   private final Authenticator authenticator;
   private final Authorizer authorizer;
 
   public static final String AUTHORIZATION_HEADER = "authorization";
 
-  public SecuredRequestHandler() throws URISyntaxException {
+  private SecuredRequestHandler() throws URISyntaxException {
     this(new File(SecuredRequestHandler.class
         .getClassLoader()
         .getResource("authorizations.csv").toURI()));
@@ -36,8 +36,28 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
     authorizer = new Authorizer(authorizationsFile);
   }
 
+  public static SecuredRequestHandler newSecuredRequestHandler(
+      AwsHandler awsHandler, Supplier<Operation> operationGetter) {
+    try {
+      return new SecuredRequestHandler() {
+        @Override
+        protected APIGatewayProxyResponseEvent handleSecuredRequest(
+            APIGatewayProxyRequestEvent event, Context context) {
+          return awsHandler.apply(event, context);
+        }
+
+        @Override
+        public Operation getOperation() {
+          return operationGetter.get();
+        }
+      };
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @Override
-  protected APIGatewayProxyResponseEvent handleErrorCaughtRequest(APIGatewayProxyRequestEvent input, Context context) {
+  public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent input, Context context) {
     if (!isAuthorized(input)) {
       return new APIGatewayProxyResponseEvent()
           .withStatusCode(403)
@@ -47,7 +67,9 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
   }
 
   protected abstract APIGatewayProxyResponseEvent handleSecuredRequest(
-      APIGatewayProxyRequestEvent input, Context context);
+      APIGatewayProxyRequestEvent event, Context context);
+
+  public abstract Operation getOperation();
 
   private boolean isAuthorized(APIGatewayProxyRequestEvent input) {
     var whoami = whoami(input);
@@ -60,10 +82,8 @@ public abstract class SecuredRequestHandler extends InternalErrorHandler {
     return authenticator.whoami(new Bearer(input.getHeaders().get(AUTHORIZATION_HEADER)));
   }
 
-  protected User whoisOwner(APIGatewayProxyRequestEvent input) {
+  public User whoisOwner(APIGatewayProxyRequestEvent input) {
     var userId = new User.Id(input.getPathParameters().get("userId"));
     return authenticator.whois(userId);
   }
-
-  protected abstract Operation getOperation();
 }

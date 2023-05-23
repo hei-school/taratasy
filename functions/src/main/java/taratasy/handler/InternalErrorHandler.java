@@ -4,15 +4,22 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import java.util.function.BiFunction;
+public abstract class InternalErrorHandler implements AwsHandler {
 
-public abstract class InternalErrorHandler
-    implements BiFunction<APIGatewayProxyRequestEvent, Context, APIGatewayProxyResponseEvent> {
+  public static InternalErrorHandler newInternalErrorHandler(AwsHandler awwHandler) {
+    return new InternalErrorHandler() {
+      @Override
+      protected APIGatewayProxyResponseEvent handleErrorCaughtRequest(
+          APIGatewayProxyRequestEvent event, Context context) {
+        return awwHandler.apply(event, context);
+      }
+    };
+  }
 
   @Override
-  public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent input, Context context) {
+  public APIGatewayProxyResponseEvent apply(APIGatewayProxyRequestEvent event, Context context) {
     try {
-      return handleErrorCaughtRequest(input, context);
+      return handleErrorCaughtRequest(event, context);
     } catch (Exception e) {
       return new APIGatewayProxyResponseEvent()
           .withStatusCode(500)
