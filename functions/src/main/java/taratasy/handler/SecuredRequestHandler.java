@@ -20,7 +20,7 @@ public abstract class SecuredRequestHandler implements AwsHandler {
   private final Authenticator authenticator;
   private final Authorizer authorizer;
 
-  public static final String AUTHORIZATION_HEADER = "authorization";
+  public static final String AUTHORIZATION_HEADER = "Authorization";
 
   private SecuredRequestHandler() throws URISyntaxException {
     this(new File(SecuredRequestHandler.class

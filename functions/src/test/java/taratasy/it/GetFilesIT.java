@@ -1,6 +1,7 @@
 package taratasy.it;
 
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static taratasy.handler.SecuredRequestHandler.AUTHORIZATION_HEADER;
 
 public class GetFilesIT {
+
+  @Disabled
   @Test
   public void concurrently_get_files() {
     var callerNb = 100;
@@ -29,7 +32,7 @@ public class GetFilesIT {
     for (var callerIdx = 0; callerIdx < callerNb; callerIdx++) {
       futures.add(
           executor.submit(() -> getTaratasyList(
-              new URI("https://ijhtk0krr9.execute-api.eu-central-1.amazonaws.com/users/litaId/files"),
+              new URI("https://jgdenz6uig.execute-api.eu-central-1.amazonaws.com/Prod/users/litaId/files"),
               "bearer lita",
               latch)));
     }

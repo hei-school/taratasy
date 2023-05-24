@@ -36,7 +36,7 @@ Resources:
             TableName: !Ref Table
       Events:
         GetFiles:
-          Type: HttpApi
+          Type: Api
           Properties:
             Path: /users/{userId}/files
             Method: get
@@ -49,7 +49,7 @@ Resources:
             TableName: !Ref Table
       Events:
         GetFileById:
-          Type: HttpApi
+          Type: Api
           Properties:
             Path: /users/{userId}/files/{fileId}
             Method: get
@@ -62,7 +62,7 @@ Resources:
             TableName: !Ref Table
       Events:
         DreactivateFile:
-          Type: HttpApi
+          Type: Api
           Properties:
             Path: /users/{userId}/files/{fileId}/status
             Method: put
@@ -83,5 +83,5 @@ Resources:
           KeyType: RANGE
 
 Outputs:
-  HttpApi:
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  Api:
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
